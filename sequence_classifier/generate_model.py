@@ -67,3 +67,16 @@ trainer = Trainer(
 )
 
 trainer.train()
+
+import os
+def save_model(model, filename):
+    cur_path = os.path.split(os.path.realpath(__file__))[0]
+    project_path = cur_path#os.path.split(cur_path)[0]
+    datafile = os.path.join(project_path, 'generated_models', filename)
+    #torch.save(model, datafile)
+    trainer.save_model(datafile)
+    return True
+
+
+
+save_model(model, model_name)

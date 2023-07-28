@@ -84,9 +84,9 @@ training_args = TrainingArguments(
     per_device_eval_batch_size=16,
     num_train_epochs=epochs,
     weight_decay=0.01,
-    evaluation_strategy="epoch",
-    save_strategy="epoch",
-    load_best_model_at_end=True#,
+    #evaluation_strategy="epoch",
+    #save_strategy="epoch",
+    #load_best_model_at_end=True#,
     #push_to_hub=True,
 )
 
@@ -97,7 +97,19 @@ trainer = Trainer(
     eval_dataset=squad["test"],
     tokenizer=tokenizer,
     data_collator=data_collator,
-    compute_metrics=compute_metrics,
+    #compute_metrics=compute_metrics,
 )
 
 trainer.train()
+import os
+def save_model(model, filename):
+    cur_path = os.path.split(os.path.realpath(__file__))[0]
+    project_path = cur_path#os.path.split(cur_path)[0]
+    datafile = os.path.join(project_path, 'generated_models', filename)
+    #torch.save(model, datafile)
+    trainer.save_model(datafile)
+    return True
+
+
+
+save_model(model, model_name)

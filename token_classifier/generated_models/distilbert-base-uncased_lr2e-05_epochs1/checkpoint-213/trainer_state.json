@@ -1,5 +1,5 @@
 {
-  "best_metric": 0.30808591842651367,
+  "best_metric": 0.31599336862564087,
   "best_model_checkpoint": "generated_models/distilbert-base-uncased_lr2e-05_epochs1/checkpoint-213",
   "epoch": 1.0,
   "global_step": 213,
@@ -9,14 +9,14 @@
   "log_history": [
     {
       "epoch": 1.0,
-      "eval_accuracy": 0.9330939250138942,
-      "eval_f1": 0.19168428470754054,
-      "eval_loss": 0.30808591842651367,
-      "eval_precision": 0.4,
-      "eval_recall": 0.12604263206672844,
-      "eval_runtime": 19.5672,
-      "eval_samples_per_second": 65.773,
-      "eval_steps_per_second": 4.14,
+      "eval_accuracy": 0.9296738061647642,
+      "eval_f1": 0.10221205186880243,
+      "eval_loss": 0.31599336862564087,
+      "eval_precision": 0.28879310344827586,
+      "eval_recall": 0.06209453197405004,
+      "eval_runtime": 2.9071,
+      "eval_samples_per_second": 442.706,
+      "eval_steps_per_second": 27.863,
       "step": 213
     }
   ],

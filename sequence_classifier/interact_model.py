@@ -43,7 +43,7 @@ project_path = cur_path#os.path.split(cur_path)[0]
 folder = os.path.join(project_path,'generated_models', modelname)
 
 from transformers import pipeline
-classifier = pipeline("ner", model=folder)
+classifier = pipeline("sentiment-analysis", model=folder)
 
 print('=======BEGIN TYPING=======')
 while True:
@@ -51,5 +51,4 @@ while True:
     s = input()
     #print output after applying to model
     print(f"you said:{s}" )
-    #token_s = tokenizer(examples["tokens"], truncation=True, is_split_into_words=True)
     print(classifier(s))

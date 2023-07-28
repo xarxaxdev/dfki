@@ -1,0 +1,43 @@
+{
+  "best_metric": 0.19954097270965576,
+  "best_model_checkpoint": "generated_models/distilbert-base-uncased_lr2e-05_epochs1/checkpoint-1563",
+  "epoch": 1.0,
+  "global_step": 1563,
+  "is_hyper_param_search": false,
+  "is_local_process_zero": true,
+  "is_world_process_zero": true,
+  "log_history": [
+    {
+      "epoch": 0.32,
+      "learning_rate": 1.3602047344849649e-05,
+      "loss": 0.3182,
+      "step": 500
+    },
+    {
+      "epoch": 0.64,
+      "learning_rate": 7.204094689699297e-06,
+      "loss": 0.2422,
+      "step": 1000
+    },
+    {
+      "epoch": 0.96,
+      "learning_rate": 8.061420345489445e-07,
+      "loss": 0.2185,
+      "step": 1500
+    },
+    {
+      "epoch": 1.0,
+      "eval_accuracy": 0.92632,
+      "eval_loss": 0.19954097270965576,
+      "eval_runtime": 499.7295,
+      "eval_samples_per_second": 50.027,
+      "eval_steps_per_second": 3.128,
+      "step": 1563
+    }
+  ],
+  "max_steps": 1563,
+  "num_train_epochs": 1,
+  "total_flos": 3284752688410752.0,
+  "trial_name": null,
+  "trial_params": null
+}
