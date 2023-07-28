@@ -1,0 +1,4 @@
+token_classifier/generated_models/distilbert-base-uncased_lr2e-05_epochs1 filter=lfs diff=lfs merge=lfs -text
+*.bin filter=lfs diff=lfs merge=lfs -text
+*model.bin filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
