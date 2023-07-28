@@ -120,7 +120,7 @@ model = AutoModelForTokenClassification.from_pretrained(
 
 
 training_args = TrainingArguments(
-    output_dir=f"output_training/{model_name}",
+    output_dir=f"generated_models/{model_name}",
     learning_rate=lr,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=16,
