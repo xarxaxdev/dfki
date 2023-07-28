@@ -70,7 +70,7 @@ data_collator = DefaultDataCollator()
 
 from transformers import AutoModelForQuestionAnswering, TrainingArguments, Trainer
 
-model = AutoModelForQuestionAnswering.from_pretrained("distilbert-base-uncased")
+model = AutoModelForQuestionAnswering.from_pretrained("distilbert-base-uncased").to('cuda')
 
 
 epochs = 1 
@@ -93,8 +93,8 @@ training_args = TrainingArguments(
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=tokenized_imdb["train"],
-    eval_dataset=tokenized_imdb["test"],
+    train_dataset=squad["train"],
+    eval_dataset=squad["test"],
     tokenizer=tokenizer,
     data_collator=data_collator,
     compute_metrics=compute_metrics,

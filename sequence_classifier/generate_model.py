@@ -37,7 +37,7 @@ from transformers import AutoModelForSequenceClassification, TrainingArguments, 
 
 model = AutoModelForSequenceClassification.from_pretrained(
     "distilbert-base-uncased", num_labels=2, id2label=id2label, label2id=label2id
-)
+).to('cuda')
 
 epochs = 1 
 lr = 2e-5 

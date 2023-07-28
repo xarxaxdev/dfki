@@ -1,0 +1,28 @@
+{
+  "best_metric": 0.30808591842651367,
+  "best_model_checkpoint": "generated_models/distilbert-base-uncased_lr2e-05_epochs1/checkpoint-213",
+  "epoch": 1.0,
+  "global_step": 213,
+  "is_hyper_param_search": false,
+  "is_local_process_zero": true,
+  "is_world_process_zero": true,
+  "log_history": [
+    {
+      "epoch": 1.0,
+      "eval_accuracy": 0.9330939250138942,
+      "eval_f1": 0.19168428470754054,
+      "eval_loss": 0.30808591842651367,
+      "eval_precision": 0.4,
+      "eval_recall": 0.12604263206672844,
+      "eval_runtime": 19.5672,
+      "eval_samples_per_second": 65.773,
+      "eval_steps_per_second": 4.14,
+      "step": 213
+    }
+  ],
+  "max_steps": 213,
+  "num_train_epochs": 1,
+  "total_flos": 46033239467220.0,
+  "trial_name": null,
+  "trial_params": null
+}
