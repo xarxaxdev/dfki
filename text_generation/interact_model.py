@@ -7,7 +7,7 @@ from transformers import AutoModelForTokenClassification, TrainingArguments, Tra
 def load_model(filename):
     cur_path = os.path.split(os.path.realpath(__file__))[0]
     project_path = cur_path#os.path.split(cur_path)[0]
-    datafile = os.path.join(project_path,'generated_models', filename)
+    datafile = os.path.join(os.path.expanduser('~'),'generated_models', filename)
     #return torch.load(datafile,map_location=torch.device('cpu'))
     return AutoModelForTokenClassification.from_pretrained(datafile)
 
@@ -30,20 +30,16 @@ def params():
 
 args = params()
 modelname = args.modelname if args.modelname else 'distilbert-base-uncased_lr2e-05_epochs1' 
-
-model= load_model(modelname)
+datafile = os.path.join(os.path.expanduser('~'),'generated_models', modelname)
 
 
 #need a tokenizer 
 from transformers import AutoTokenizer
 tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
 
-cur_path = os.path.split(os.path.realpath(__file__))[0]
-project_path = cur_path#os.path.split(cur_path)[0]
-folder = os.path.join(project_path,'generated_models', modelname)
 
 from transformers import pipeline
-classifier = pipeline("ner", model=folder)
+classifier = pipeline("ner", model=datafile)
 
 print('=======BEGIN TYPING=======')
 while True:
