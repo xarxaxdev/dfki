@@ -39,7 +39,7 @@ tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
 
 
 from transformers import pipeline
-classifier = pipeline("ner", model=datafile)
+classifier = pipeline("sentiment-analysis", model=datafile)
 
 print('=======BEGIN TYPING=======')
 while True:
