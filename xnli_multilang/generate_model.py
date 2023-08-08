@@ -43,9 +43,8 @@ epochs = 1
 lr = 2e-5 
 pretrained_model = 'distilbert-base-uncased' 
 model_name = f'{pretrained_model}_lr{lr}_epochs{epochs}'
-path = f"generated_models/{model_name}"
 training_args = TrainingArguments(
-    output_dir = path,
+    output_dir=f"~/generated_models/{model_name}",
     learning_rate=2e-5,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=16,
@@ -80,4 +79,4 @@ def save_model(model, filename):
 
 
 
-save_model(model, path)
+save_model(model, model_name)

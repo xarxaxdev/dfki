@@ -1,6 +1,21 @@
 import os,torch
 import argparse
 
+from transformers import AutoModelForTokenClassification, TrainingArguments, Trainer
+
+
+def load_model(filename):
+    cur_path = os.path.split(os.path.realpath(__file__))[0]
+    project_path = cur_path#os.path.split(cur_path)[0]
+    datafile = os.path.join(project_path, '~/generated_models', filename)
+    #return torch.load(datafile,map_location=torch.device('cpu'))
+    return AutoModelForTokenClassification.from_pretrained(datafile)
+
+
+
+
+
+
 def params():
     parser = argparse.ArgumentParser(
         description='Parameters for the model'
@@ -16,7 +31,6 @@ def params():
 args = params()
 modelname = args.modelname if args.modelname else 'distilbert-base-uncased_lr2e-05_epochs1' 
 datafile = os.path.join(os.path.expanduser('~'),'generated_models', modelname)
-model_path = f"generated_models/{model_name}"
 
 
 #need a tokenizer 
@@ -25,7 +39,7 @@ tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
 
 
 from transformers import pipeline
-classifier = pipeline("ner", model=model_path)
+classifier = pipeline("sentiment-analysis", model=datafile)
 
 print('=======BEGIN TYPING=======')
 while True:

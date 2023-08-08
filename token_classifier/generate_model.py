@@ -118,9 +118,10 @@ model = AutoModelForTokenClassification.from_pretrained(
 )#.to('cuda')
 
 
+model_path = f"generated_models/{model_name}"
 
 training_args = TrainingArguments(
-    output_dir=f"~/generated_models/{model_name}",
+    output_dir=model_path,
     learning_rate=lr,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=16,
@@ -151,7 +152,7 @@ import os,torch
 def save_model(model, filename):
     cur_path = os.path.split(os.path.realpath(__file__))[0]
     project_path = cur_path#os.path.split(cur_path)[0]
-    datafile = os.path.join(os.path.expanduser('~'),'generated_models', filename)
+    datafile = os.path.join(cur_path,'generated_models', filename)
     #torch.save(model, datafile)
     trainer.save_model(datafile)
     return True
@@ -159,4 +160,4 @@ def save_model(model, filename):
 
 
 
-save_model(model, model_name)
+save_model(model, model_path)
