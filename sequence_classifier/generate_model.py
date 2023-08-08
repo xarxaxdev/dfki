@@ -43,9 +43,9 @@ epochs = 1
 lr = 2e-5 
 pretrained_model = 'distilbert-base-uncased' 
 model_name = f'{pretrained_model}_lr{lr}_epochs{epochs}'
-path = f"generated_models/{model_name}"
+model_path = f"generated_models/{model_name}"
 training_args = TrainingArguments(
-    output_dir = path,
+    output_dir = model_path,
     learning_rate=2e-5,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=16,
@@ -69,15 +69,18 @@ trainer = Trainer(
 
 trainer.train()
 
-import os
-def save_model(model, filename):
+import os,torch
+
+
+def save_model(model, path):
     cur_path = os.path.split(os.path.realpath(__file__))[0]
     project_path = cur_path#os.path.split(cur_path)[0]
-    datafile = os.path.join(os.path.expanduser('~'),'generated_models', filename)
+    datafile = os.path.join(cur_path, path)
     #torch.save(model, datafile)
     trainer.save_model(datafile)
     return True
 
 
 
-save_model(model, path)
+
+save_model(model, model_path)

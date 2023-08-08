@@ -31,6 +31,7 @@ def params():
 args = params()
 modelname = args.modelname if args.modelname else 'distilbert-base-uncased_lr2e-05_epochs1' 
 datafile = os.path.join(os.path.expanduser('~'),'generated_models', modelname)
+model_path = f"generated_models/{modelname}"
 
 
 #need a tokenizer 
