@@ -1,7 +1,7 @@
 version: "2.3"
 
 services:
-  pytorch-ngc:
+  token-classifier-pytorch:
     runtime: nvidia
     container_name: pytorch-ngc
     image: pytorch-ngc
@@ -10,8 +10,8 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - ./ipynbs:/workspace
+      - ./generated_models:/workspace
       - ./data:/workspace/data
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
-    command: jupyter notebook --allow-root --ip=0.0.0.0 --no-browser --NotebookApp.token=abc123
+    command: python generate_model.py  
