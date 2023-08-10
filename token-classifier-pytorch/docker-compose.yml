@@ -2,16 +2,17 @@ version: "2.3"
 
 services:
   token-classifier-pytorch:
-    runtime: nvidia
-    container_name: pytorch-ngc
-    image: pytorch-ngc
+    #runtime: nvidia
+    #container_name: pytorch-ngc
+    #image: pytorch-ngc
     build: .
-    ipc: host
-    ports:
-      - 8888:8888
     volumes:
-      - ./generated_models:/workspace
-      - ./data:/workspace/data
+      - .:/workspace
+      #- generated_models:/workspace
+      #- ./data:/workspace
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
-    command: python generate_model.py  
+    #command: python generate_model.py  
+volumes:
+  generated_models:
+    external: false
