@@ -1,4 +1,4 @@
-FROM pytorch-ngc
+FROM docker.io/gnuoctave/octave:8.2.0
 
 WORKDIR /workspace
 

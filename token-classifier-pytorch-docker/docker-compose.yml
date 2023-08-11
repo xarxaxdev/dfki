@@ -4,7 +4,7 @@ services:
   token-classifier-pytorch:
     #runtime: nvidia
     #container_name: pytorch-ngc
-    #image: pytorch-ngc
+    image: docker.io/gnuoctave/octave:8.2.0
     build: .
     volumes:
       - .:/workspace
@@ -12,7 +12,7 @@ services:
       #- ./data:/workspace
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
-    #command: python generate_model.py  
+    command: python generate_model.py  
 volumes:
   generated_models:
     external: false
