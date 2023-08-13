@@ -7,7 +7,6 @@ xnli = {}
 for l in languages:
     xnli[l] = load_dataset("xnli",l)
 
-
 #TOKENIZING
 base_model = "bert-base-multilingual-cased"
 from transformers import AutoTokenizer
@@ -25,26 +24,32 @@ import evaluate
 f1 = evaluate.load("f1")
 import numpy as np
 def compute_metrics(eval_pred):
+    print(eval_pred)
     predictions, labels = eval_pred
     predictions = np.argmax(predictions, axis=1)
     return f1.compute(predictions=predictions, references=labels)
 
 
-id2label = {0: "NEGATIVE", 1: "POSITIVE"}
-label2id = {"NEGATIVE": 0, "POSITIVE": 1}
+id2label = {0: "Entailment", 1: "Neutral",2:'Contradiction'}
+label2id = {"Entailment": 0, "Neutral": 1, 'Contradiction':2}
 
 
 from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
+
+#labels = [i[f"label"] for i in tokenized_xnli[l]["train"]]
+#print(labels)
+#print(tokenized_xnli[l]["train"][0])
 #assert(False)
 
 epochs = 1 
 lr = 2e-5 
+import torch,os
 
 for l in languages:
     print(f'training model for {l}')
     model = AutoModelForSequenceClassification.from_pretrained(
-        base_model, num_labels=2, id2label=id2label, label2id=label2id
-    )#.to('cuda')
+        base_model, num_labels=len(id2label), id2label=id2label, label2id=label2id
+    ).to('cuda' if torch.cuda.is_available() else 'cpu')
     model_name = f'{base_model}_lr{lr}_epochs{epochs}_l={l}'
 
     training_args = TrainingArguments(
@@ -72,12 +77,10 @@ for l in languages:
 
     trainer.train()
 
-    import os
     def save_model(model, filename):
         cur_path = os.path.split(os.path.realpath(__file__))[0]
-        project_path = cur_path#os.path.split(cur_path)[0]
+        project_path = cur_path
         datafile = os.path.join(os.path.expanduser('~'),'generated_models', filename)
-        #torch.save(model, datafile)
         trainer.save_model(datafile)
         return True
 

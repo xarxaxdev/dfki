@@ -115,7 +115,7 @@ for l in label_list:
 from transformers import AutoModelForTokenClassification, TrainingArguments, Trainer
 model = AutoModelForTokenClassification.from_pretrained(
     pretrained_model, num_labels=len(id2label), id2label=id2label, label2id=label2id
-)#.to('cuda')
+).to('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 model_path = f"generated_models/{model_name}"
