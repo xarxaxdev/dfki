@@ -1,12 +1,12 @@
 #DATASET LOADING
 from datasets import load_dataset
 languages = ['ar', 'bg', 'de', 'el', 'en', 'es', 'fr', 'hi', 'ru', 'sw', 'th', 'tr', 'ur', 'vi', 'zh']
-languages = ['es']
+#languages = ['es']
 #languages.append['all_languages'] #I'll think what to do with this one
 xnli = {}
 for l in languages:
     xnli[l] = load_dataset("xnli",l)
-    xnli[l]['train'] = xnli[l]['train'].select(range(5000))
+    #xnli[l]['train'] = xnli[l]['train'].select(range(5000))
 
 #TOKENIZING
 base_model = "bert-base-multilingual-cased"
