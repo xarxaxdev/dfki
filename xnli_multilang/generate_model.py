@@ -6,7 +6,7 @@ languages = ['es']
 xnli = {}
 for l in languages:
     xnli[l] = load_dataset("xnli",l)
-    xnli[l]['train'] = xnli[l]['train'].select(range(50))
+    xnli[l]['train'] = xnli[l]['train'].select(range(5000))
 
 #TOKENIZING
 base_model = "bert-base-multilingual-cased"
@@ -58,6 +58,7 @@ for l in languages:
         per_device_eval_batch_size=16,
         num_train_epochs=epochs,
         weight_decay=0.01,
+        metric_for_best_model='f1',
         evaluation_strategy="epoch",
         logging_strategy="epoch",
         save_strategy="epoch",

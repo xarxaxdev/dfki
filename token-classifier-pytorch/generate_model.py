@@ -128,6 +128,7 @@ training_args = TrainingArguments(
     per_device_eval_batch_size=16,
     num_train_epochs=epochs,#2, # 2 was the original value but runnig it on non-GPU
     weight_decay=0.01,
+    metric_for_best_model='f1',
     evaluation_strategy="epoch",
     logging_strategy="epoch",
     save_strategy="epoch",
