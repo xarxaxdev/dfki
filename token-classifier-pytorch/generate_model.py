@@ -155,16 +155,17 @@ for metrics in trainer.state.log_history:
     elif 'loss' in metrics :
         metrics_values['tra_loss'].append(round(metrics['loss'],3))
 
-def print_metrics():
-    out = '\t'.join(['epoch'] + [str(i) for i in range(epochs)])
-    for m in metrics_values:
-        out += '\n' + '\t'.join([m]+[str(i) for i in metrics_values[m]])
-    return out
 
 
 cur_path = os.path.split(os.path.realpath(__file__))[0]
 datafile = os.path.join(cur_path, model_path)
 trainer.save_model(datafile)
+
+def print_metrics():
+    out = '\t'.join(['epoch'] + [str(i) for i in range(epochs)])
+    for m in metrics_values:
+        out += '\n' + '\t'.join([m]+[str(i) for i in metrics_values[m]])
+    return out
 
 with open(datafile+'/metrics.csv','w') as f:
     f.write(print_metrics())
