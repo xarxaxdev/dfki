@@ -1,4 +1,5 @@
 import argparse
+import os,torch
 
 def params():
     parser = argparse.ArgumentParser(
@@ -25,7 +26,7 @@ def params():
 
 args = params()
 #default parameters for little work
-epochs = int(args.epochs) if args.epochs else 1 
+epochs = int(args.epochs) if args.epochs else 3
 lr = float(args.lr) if args.lr else 2e-5 
 pretrained_model = args.pretrained_model if args.pretrained_model else 'distilbert-base-uncased' 
 model_name = f'{pretrained_model}_lr{lr}_epochs{epochs}'
@@ -128,6 +129,7 @@ training_args = TrainingArguments(
     num_train_epochs=epochs,#2, # 2 was the original value but runnig it on non-GPU
     weight_decay=0.01,
     evaluation_strategy="epoch",
+    logging_strategy="epoch",
     save_strategy="epoch",
     load_best_model_at_end=True#,
     #push_to_hub=True, #this is for sharing it in hugginface so commented it
@@ -137,27 +139,32 @@ trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=tokenized_wnut["train"],
-    eval_dataset=tokenized_wnut["test"],
+    eval_dataset=tokenized_wnut["validation"],
     tokenizer=tokenizer,
     data_collator=data_collator,
     compute_metrics=compute_metrics,
 )
 
-trainer.train()
+train_result = trainer.train()
+
+metrics_values = {'val_f1':[],'val_loss':[],'tra_loss':[]}
+for metrics in trainer.state.log_history:
+    if 'eval_f1' in metrics:
+        metrics_values['val_loss'].append(round(metrics['eval_loss'],3))
+        metrics_values['val_f1'].append(round(metrics['eval_f1'],3))
+    elif 'loss' in metrics :
+        metrics_values['tra_loss'].append(round(metrics['loss'],3))
+
+def print_metrics():
+    out = '\t'.join(['epoch'] + [str(i) for i in range(epochs)])
+    for m in metrics_values:
+        out += '\n' + '\t'.join([m]+[str(i) for i in metrics_values[m]])
+    return out
 
 
-import os,torch
+cur_path = os.path.split(os.path.realpath(__file__))[0]
+datafile = os.path.join(cur_path, model_path)
+trainer.save_model(datafile)
 
-
-def save_model(model, path):
-    cur_path = os.path.split(os.path.realpath(__file__))[0]
-    project_path = cur_path#os.path.split(cur_path)[0]
-    datafile = os.path.join(cur_path, path)
-    #torch.save(model, datafile)
-    trainer.save_model(datafile)
-    return True
-
-
-
-
-save_model(model, model_path)
+with open(datafile+'/metrics.csv','w') as f:
+    f.write(print_metrics())
