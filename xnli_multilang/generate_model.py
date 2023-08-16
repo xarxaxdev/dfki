@@ -1,6 +1,6 @@
 #DATASET LOADING
 from datasets import load_dataset
-languages = ['en','ar', 'bg', 'de', 'el', 'en', 'es', 'fr', 'hi', 'ru', 'sw', 'th', 'tr', 'ur', 'vi', 'zh']
+languages = ['ar', 'bg', 'de', 'el', 'en', 'es', 'fr', 'hi', 'ru', 'sw', 'th', 'tr', 'ur', 'vi', 'zh']
 #languages = ['es']
 #languages.append['all_languages'] #I'll think what to do with this one
 xnli = {}
