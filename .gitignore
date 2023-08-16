@@ -1,5 +1,5 @@
 */generated_models/*
-!*/generated_models/*/*.csv
+!*/generated_models/*/metrics.csv
 
 *.sif
 
