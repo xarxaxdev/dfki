@@ -3,4 +3,5 @@
 !*/generated_models/*/metrics.csv
 
 *.sif
+*.out
 
