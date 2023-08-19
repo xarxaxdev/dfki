@@ -1,12 +1,11 @@
 #DATASET LOADING
 from datasets import load_dataset
 languages = ['ar', 'bg', 'de', 'el', 'en', 'es', 'fr', 'hi', 'ru', 'sw', 'th', 'tr', 'ur', 'vi', 'zh']
-#languages = ['es']
-#languages.append['all_languages'] #I'll think what to do with this one
+languages = ['en']
+
 xnli = {}
 for l in languages:
     xnli[l] = load_dataset("xnli",l)
-    #xnli[l]['train'] = xnli[l]['train'].select(range(5000))
 
 #TOKENIZING
 base_model = "bert-base-multilingual-cased"
@@ -39,72 +38,73 @@ label2id = {"Entailment": 0, "Neutral": 1, 'Contradiction':2}
 from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
 
 
-epochs = 4
-lr = 2e-5 
+epochs = 5
+lrs = [1e-5,5e-6,2e-6]
 import torch,os
 
 for l in languages:
-    print(f'training model for {l}')
-    model = AutoModelForSequenceClassification.from_pretrained(
-        base_model, num_labels=len(id2label), id2label=id2label, label2id=label2id
-    ).to('cuda' if torch.cuda.is_available() else 'cpu')
-    model_name = f'{base_model}_lr{lr}_epochs{epochs}_l={l}'
-    model_path = f"generated_models/{model_name}"
+    for lr in lrs:
+        print(f'training model for {l}')
+        model = AutoModelForSequenceClassification.from_pretrained(
+            base_model, num_labels=len(id2label), id2label=id2label, label2id=label2id
+        ).to('cuda' if torch.cuda.is_available() else 'cpu')
+        model_name = f'{base_model}_lr{lr}_epochs{epochs}_l={l}'
+        model_path = f"generated_models/{model_name}"
 
-    training_args = TrainingArguments(
-        output_dir=model_path,
-        learning_rate=2e-5,
-        per_device_train_batch_size=8,
-        per_device_eval_batch_size=16,
-        num_train_epochs=epochs,
-        weight_decay=0.01,
-        metric_for_best_model='f1',
-        evaluation_strategy="epoch",
-        logging_strategy="epoch",
-        save_strategy="epoch",
-        load_best_model_at_end=True#,
-        #push_to_hub=True,
-    )
+        training_args = TrainingArguments(
+            output_dir=model_path,
+            learning_rate=2e-5,
+            per_device_train_batch_size=16,
+            per_device_eval_batch_size=16,
+            num_train_epochs=epochs,
+            weight_decay=0.01,
+            metric_for_best_model='f1',
+            evaluation_strategy="epoch",
+            logging_strategy="epoch",
+            save_strategy="epoch",
+            load_best_model_at_end=True#,
+            #push_to_hub=True,
+        )
 
-    trainer = Trainer(
-        model=model,
-        args=training_args,
-        train_dataset=tokenized_xnli[l]["train"],
-        eval_dataset=tokenized_xnli[l]["validation"],
-        tokenizer=tokenizer,
-        data_collator=data_collator,
-        compute_metrics=compute_metrics,
-    )
+        trainer = Trainer(
+            model=model,
+            args=training_args,
+            train_dataset=tokenized_xnli[l]["train"],
+            eval_dataset=tokenized_xnli[l]["validation"],
+            tokenizer=tokenizer,
+            data_collator=data_collator,
+            compute_metrics=compute_metrics,
+        )
 
-    trainer.train()
+        trainer.train()
 
-    print('------TRAINING FINISHED----------')
-    cur_path = os.path.split(os.path.realpath(__file__))[0]
-    datafile = os.path.join(cur_path, model_path)
-    trainer.save_model(datafile)
+        print('------TRAINING FINISHED----------')
+        cur_path = os.path.split(os.path.realpath(__file__))[0]
+        datafile = os.path.join(cur_path, model_path)
+        trainer.save_model(datafile)
 
 
-    metrics_values = {'val_f1':[],'val_loss':[],'tra_loss':[]}
-    for metrics in trainer.state.log_history:
-        if 'eval_f1' in metrics:
-            metrics_values['val_loss'].append(round(metrics['eval_loss'],3))
-            metrics_values['val_f1'].append(round(metrics['eval_f1'],3))
-        elif 'loss' in metrics :
-            metrics_values['tra_loss'].append(round(metrics['loss'],3))
+        metrics_values = {'val_f1':[],'val_loss':[],'tra_loss':[]}
+        for metrics in trainer.state.log_history:
+            if 'eval_f1' in metrics:
+                metrics_values['val_loss'].append(round(metrics['eval_loss'],3))
+                metrics_values['val_f1'].append(round(metrics['eval_f1'],3))
+            elif 'loss' in metrics :
+                metrics_values['tra_loss'].append(round(metrics['loss'],3))
 
-    def print_metrics():
-        out = '\t'.join(['epoch'] + [str(i+1) for i in range(epochs)])
-        for m in metrics_values:
-            out += '\n' + '\t'.join([m]+[str(i) for i in metrics_values[m]])
-        eval_res = trainer.evaluate(tokenized_xnli[l]["validation"])
-        print(eval_res)
-        out += f'\nBest F1 on evaluation is {round(eval_res["eval_f1"],3)}'
-        test_res = trainer.evaluate(tokenized_xnli[l]["test"])
-        print(test_res)
-        out += f'\nBest F1 on testing is {round(test_res["eval_f1"],3)}'
-        #out += trainer.evaluate(tokenized_xnli[l]["testing"])
-        return out
+        def print_metrics():
+            out = '\t'.join(['epoch'] + [str(i+1) for i in range(epochs)])
+            for m in metrics_values:
+                out += '\n' + '\t'.join([m]+[str(i) for i in metrics_values[m]])
+            eval_res = trainer.evaluate(tokenized_xnli[l]["validation"])
+            print(eval_res)
+            out += f'\nBest F1 on evaluation is {round(eval_res["eval_f1"],3)}'
+            test_res = trainer.evaluate(tokenized_xnli[l]["test"])
+            print(test_res)
+            out += f'\nBest F1 on testing is {round(test_res["eval_f1"],3)}'
+            #out += trainer.evaluate(tokenized_xnli[l]["testing"])
+            return out
 
-    with open(datafile+'/metrics.csv','w') as f:
-        f.write(print_metrics())
+        with open(datafile+'/metrics.csv','w') as f:
+            f.write(print_metrics())
 
