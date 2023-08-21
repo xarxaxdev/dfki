@@ -1,0 +1,6 @@
+epoch	1	2	3	4	5
+val_f1	0.8	0.827	0.825	0.823	0.826
+val_loss	0.503	0.452	0.509	0.611	0.77
+tra_loss	0.594	0.441	0.332	0.247	0.192
+Best F1 on evaluation is 0.827
+Best F1 on testing is 0.819
