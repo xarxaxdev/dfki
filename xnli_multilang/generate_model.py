@@ -39,26 +39,26 @@ from transformers import AutoModelForSequenceClassification, TrainingArguments, 
 
 
 epochs = 5
-lrs = [1e-5,5e-6,2e-6]
+lrs = [1e-6,2e-6,5e-6,1e-5,2e-5]
 batch_sizes= [8,16, 32 ]
 import torch,os
+skip_combinations = 3
 
 for l in languages:
     for lr in lrs:
         for bs in batch_sizes:
-            print(f'training model for {l}')
             model = AutoModelForSequenceClassification.from_pretrained(
                 base_model, num_labels=len(id2label), id2label=id2label, label2id=label2id
             ).to('cuda' if torch.cuda.is_available() else 'cpu')
-            model_name = f'{base_model}_lr{lr}_epochs{epochs}_l={l}'
+            model_name = f'{base_model}_lr{lr}_bs{bs}_epochs{epochs}_l={l}'
             model_path = f"generated_models/{model_name}"
-
+            print(f'--------Training model {model_name}--------')
             training_args = TrainingArguments(
                 output_dir=model_path,
                 learning_rate=lr,#2e-5,
-                gradient_accumulation_steps=1,
-                per_device_train_batch_size=bs,
-                per_device_eval_batch_size=bs,
+                gradient_accumulation_steps=2 if bs== 32 else 1,
+                per_device_train_batch_size=16 if bs== 32 else bs,
+                per_device_eval_batch_size= 16 if bs== 32 else bs,
                 num_train_epochs=epochs,
                 weight_decay=0.01,
                 evaluation_strategy="epoch",
