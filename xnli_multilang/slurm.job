@@ -15,5 +15,5 @@
 
 #srun -p gpu -G 1 --pty bash
 
-apptainer run --nv xnli_multilang.sif
+apptainer run --nv img.sif
 

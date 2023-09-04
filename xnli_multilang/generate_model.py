@@ -38,11 +38,11 @@ label2id = {"Entailment": 0, "Neutral": 1, 'Contradiction':2}
 from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
 
 
-epochs = 5
+epochs = 10
 lrs = [1e-6,2e-6,5e-6,1e-5,2e-5]
-batch_sizes= [8,16, 32 ]
+batch_sizes= [16 ]
 import torch,os
-skip_combinations = 3
+#skip_combinations = 3
 
 for l in languages:
     for lr in lrs:
