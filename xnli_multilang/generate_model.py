@@ -1,6 +1,11 @@
 #DATASET LOADING
+import evaluate,torch,os
+import numpy as np
 from datasets import load_dataset
-#languages = ['ar', 'bg', 'de', 'el', 'en', 'es', 'fr', 'hi', 'ru', 'sw', 'th', 'tr', 'ur', 'vi', 'zh']
+from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
+from transformers import DataCollatorWithPadding,AutoTokenizer
+
+languages = ['ar', 'bg', 'de', 'el', 'en', 'es', 'fr', 'hi', 'ru', 'sw', 'th', 'tr', 'ur', 'vi', 'zh']
 languages = ['en']
 
 xnli = {}
@@ -9,7 +14,8 @@ for l in languages:
 
 #TOKENIZING
 base_model = "bert-base-multilingual-cased"
-from transformers import AutoTokenizer
+
+
 tokenizer = AutoTokenizer.from_pretrained(base_model)
 def preprocess_function(examples):
     return tokenizer(examples["premise"], examples["hypothesis"], truncation=True)
@@ -18,12 +24,10 @@ for l in languages:
     tokenized_xnli[l] = xnli[l].map(preprocess_function, batched=True)
 
 #COLLATION    
-from transformers import DataCollatorWithPadding
+
 data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 #EVALUATION
-import evaluate
 f1 = evaluate.load("f1")
-import numpy as np
 def compute_metrics(eval_pred):
     print(eval_pred)
     predictions, labels = eval_pred
@@ -35,13 +39,11 @@ id2label = {0: "Entailment", 1: "Neutral",2:'Contradiction'}
 label2id = {"Entailment": 0, "Neutral": 1, 'Contradiction':2}
 
 
-from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer
 
 
 epochs = 10
 lrs = [1e-6,2e-6,5e-6,1e-5,2e-5]
 batch_sizes= [16 ]
-import torch,os
 #skip_combinations = 3
 
 for l in languages:
