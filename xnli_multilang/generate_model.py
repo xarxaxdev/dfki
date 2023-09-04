@@ -6,7 +6,7 @@ from transformers import AutoModelForSequenceClassification, TrainingArguments, 
 from transformers import DataCollatorWithPadding,AutoTokenizer
 
 languages = ['ar', 'bg', 'de', 'el', 'en', 'es', 'fr', 'hi', 'ru', 'sw', 'th', 'tr', 'ur', 'vi', 'zh']
-languages = ['en']
+#languages = ['en']
 
 xnli = {}
 for l in languages:
