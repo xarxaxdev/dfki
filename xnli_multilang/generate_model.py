@@ -93,7 +93,9 @@ for l in languages:
             print('------TRAINING FINISHED----------')
             cur_path = os.path.split(os.path.realpath(__file__))[0]
             datafile = os.path.join(cur_path, model_path)
-            os.mkdir(datafile)
+            if not os.path.exists(datafile):
+                os.mkdir(datafile)
+
             #trainer.save_model(datafile)
 
 
