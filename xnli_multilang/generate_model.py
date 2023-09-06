@@ -113,7 +113,7 @@ for l in languages:
                     out += '\n' + '\t'.join([m]+[str(i) for i in metrics_values[m]])
                 eval_res = max(metrics_values['val_f1'])
                 print(eval_res)
-                out += f'\nBest F1 on evaluation is {round(eval_res["eval_f1"],3)}'
+                out += f'\nBest F1 on evaluation is {round(eval_res)}'
                 #test_res = trainer.evaluate(tokenized_xnli[l]["test"])
                 #print(test_res)
                 #out += f'\nBest F1 on testing is {round(test_res["eval_f1"],3)}'
