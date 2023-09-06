@@ -74,7 +74,7 @@ for l in languages:
                 #save_strategy="epoch",
                 save_strategy="no",
                 metric_for_best_model='f1',
-                load_best_model_at_end=True#,
+                load_best_model_at_end=False#,
                 #push_to_hub=True,
             )
 
@@ -109,7 +109,7 @@ for l in languages:
                 out = '\t'.join(['epoch'] + [str(i+1) for i in range(epochs)])
                 for m in metrics_values:
                     out += '\n' + '\t'.join([m]+[str(i) for i in metrics_values[m]])
-                eval_res = trainer.evaluate(tokenized_xnli[l]["validation"])
+                eval_res = max(metrics_values['val_f1'])
                 print(eval_res)
                 out += f'\nBest F1 on evaluation is {round(eval_res["eval_f1"],3)}'
                 #test_res = trainer.evaluate(tokenized_xnli[l]["test"])
