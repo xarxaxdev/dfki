@@ -44,11 +44,17 @@ label2id = {"Entailment": 0, "Neutral": 1, 'Contradiction':2}
 epochs = 10
 lrs = [1e-6,2e-6,5e-6,1e-5,2e-5]
 batch_sizes= [16 ]
-#skip_combinations = 3
+skip_combinations = 0
+skip_combinations = 4
 
 for l in languages:
     for lr in lrs:
         for bs in batch_sizes:
+
+            if skip_combinations> 0:
+                skip_combinations -= 1
+                continue
+                
             model = AutoModelForSequenceClassification.from_pretrained(
                 base_model, num_labels=len(id2label), id2label=id2label, label2id=label2id
             ).to('cuda' if torch.cuda.is_available() else 'cpu')
@@ -86,7 +92,8 @@ for l in languages:
             print('------TRAINING FINISHED----------')
             cur_path = os.path.split(os.path.realpath(__file__))[0]
             datafile = os.path.join(cur_path, model_path)
-            trainer.save_model(datafile)
+            os.mkdir(datafile)
+            #trainer.save_model(datafile)
 
 
             metrics_values = {'val_f1':[],'val_loss':[],'tra_loss':[]}
