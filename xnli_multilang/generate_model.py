@@ -45,7 +45,7 @@ epochs = 10
 lrs = [1e-6,2e-6,5e-6,1e-5,2e-5]
 batch_sizes= [16 ]
 skip_combinations = 0
-skip_combinations = 4
+skip_combinations = 6
 
 for l in languages:
     for lr in lrs:
@@ -108,7 +108,8 @@ for l in languages:
                     metrics_values['tra_loss'].append(round(metrics['loss'],3))
 
             def print_metrics():
-                out = '\t'.join(['epoch'] + [str(i+1) for i in range(epochs)])
+                out = model_name + '\n'
+                out += '\t'.join(['epoch'] + [str(i+1) for i in range(epochs)])
                 for m in metrics_values:
                     out += '\n' + '\t'.join([m]+[str(i) for i in metrics_values[m]])
                 eval_res = max(metrics_values['val_f1'])
