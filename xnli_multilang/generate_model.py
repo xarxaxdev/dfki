@@ -64,9 +64,9 @@ for l in languages:
             training_args = TrainingArguments(
                 output_dir=model_path,
                 learning_rate=lr,#2e-5,
-                gradient_accumulation_steps=2 if bs== 32 else 1,
-                per_device_train_batch_size=16 if bs== 32 else bs,
-                per_device_eval_batch_size= 16 if bs== 32 else bs,
+                gradient_accumulation_steps=4 if bs== 32 else 1,
+                per_device_train_batch_size=8 if bs== 32 else bs,
+                per_device_eval_batch_size= 8 if bs== 32 else bs,
                 num_train_epochs=epochs,
                 weight_decay=0.01,
                 evaluation_strategy="epoch",
