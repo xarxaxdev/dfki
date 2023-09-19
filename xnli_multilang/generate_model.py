@@ -6,7 +6,7 @@ from transformers import AutoModelForSequenceClassification, TrainingArguments, 
 from transformers import DataCollatorWithPadding,AutoTokenizer
 
 languages = ['ar', 'bg', 'de', 'el', 'en', 'es', 'fr', 'hi', 'ru', 'sw', 'th', 'tr', 'ur', 'vi', 'zh']
-#languages = ['en']
+languages = ['en']
 
 xnli = {}
 for l in languages:
@@ -43,9 +43,9 @@ label2id = {"Entailment": 0, "Neutral": 1, 'Contradiction':2}
 
 epochs = 10
 lrs = [1e-6,2e-6,5e-6,1e-5,2e-5]
-batch_sizes= [16 ]
+batch_sizes= [8,16,32 ]
 skip_combinations = 0
-skip_combinations = 6
+#skip_combinations = 6
 
 for l in languages:
     for lr in lrs:
